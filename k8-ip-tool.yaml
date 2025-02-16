@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8-ip-tool
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ip-tool
+  template:
+    metadata:
+      labels:
+        app: ip-tool
+    spec:
+      containers:
+      - name: ip-tool
+        image: ip-tool:latest
+        imagePullPolicy: Never
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+        readinessProbe:
+          exec:
+            command: ["/bin/sh", "-c", "exit 0"]
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          exec:
+            command: ["/bin/sh", "-c", "exit 0"]
+          initialDelaySeconds: 15
+          periodSeconds: 20
+
